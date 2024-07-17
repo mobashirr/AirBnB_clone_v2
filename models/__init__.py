@@ -1,11 +1,10 @@
-#!/usr/bin/python3
-"""Initializes the storage system based on the environment variable"""
+# models/__init__.py
 
-from os import getenv
+import os
 
-storage_t = getenv('HBNB_TYPE_STORAGE')
+HBNB_TYPE_STORAGE = os.getenv('HBNB_TYPE_STORAGE')
 
-if storage_t == 'db':
+if HBNB_TYPE_STORAGE == 'db':
     from models.engine.db_storage import DBStorage
     storage = DBStorage()
 else:
