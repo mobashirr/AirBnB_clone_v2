@@ -21,6 +21,7 @@ class FileStorage:
                 if name[1] == cls:
                     same_cls.update({key:val})
         return same_cls
+
     def new(self, obj):
         """Adds new object to storage dictionary"""
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
@@ -58,16 +59,15 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
-    def all(self, cls=None):
-        
+    def delete(self, obj=None):
         """Deletes obj from __objects if its inside"""
-        if cls is None: 
+        if obj is None: 
             return
 
         obj_dict = self.all()  # Cache the dictionary
         # Ensure obj has the expected attributes
-        if hasattr(cls, '__class__') and hasattr(cls, 'id'):
-            key = cls.__class__.__name__ + '.' + cls.id
+        if hasattr(obj, '__class__') and hasattr(obj, 'id'):
+            key = obj.__class__.__name__ + '.' + obj.id
             if key in obj_dict:
                 del obj_dict[key]
         self.save()
