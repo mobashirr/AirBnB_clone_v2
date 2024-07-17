@@ -58,16 +58,16 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
-    def delete(self, obj=None):
+    def all(self, cls=None):
         
         """Deletes obj from __objects if its inside"""
-        if obj is None: 
+        if cls is None: 
             return
 
         obj_dict = self.all()  # Cache the dictionary
         # Ensure obj has the expected attributes
-        if hasattr(obj, '__class__') and hasattr(obj, 'id'):
-            key = obj.__class__.__name__ + '.' + obj.id
+        if hasattr(cls, '__class__') and hasattr(cls, 'id'):
+            key = cls.__class__.__name__ + '.' + cls.id
             if key in obj_dict:
                 del obj_dict[key]
         self.save()
