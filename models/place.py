@@ -30,7 +30,10 @@ class Place(BaseModel, Base):
     amenity_ids = []
 
     # Relationship to User
-    user = relationship("User", backref="places")
+    import os
+    HBNB_TYPE_STORAGE = os.getenv('HBNB_TYPE_STORAGE')
+    if HBNB_TYPE_STORAGE == 'db':
+        user = relationship("User", backref="places")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

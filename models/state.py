@@ -8,7 +8,11 @@ class State(BaseModel, Base):
     """ State class """
     __tablename__ = 'states'
     name = Column(String(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="all, delete, delete-orphan")
+
+    import os
+    HBNB_TYPE_STORAGE = os.getenv('HBNB_TYPE_STORAGE')
+    if HBNB_TYPE_STORAGE == 'db':
+        cities = relationship("City", backref="state", cascade="all, delete, delete-orphan")
 
     @property
     def cities(self):
