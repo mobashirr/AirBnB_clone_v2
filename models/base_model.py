@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, String, DateTime
 from datetime import datetime
-from models import storage
+
 
 Base = declarative_base()
 
@@ -18,6 +18,7 @@ class BaseModel:
 
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
+        from models import storage
         if not kwargs:
             self.id = str(uuid.uuid4())
             self.created_at = datetime.now()
@@ -54,6 +55,7 @@ class BaseModel:
         return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
 
     def save(self):
+        from models import storage
         """Updates updated_at with current time when instance is changed"""
 
         self.updated_at = datetime.now()
@@ -61,6 +63,7 @@ class BaseModel:
         storage.save()
 
     def delete(self):
+        from models import storage
         """Delete the current instance from the storage"""
         storage.delete(self)
 
