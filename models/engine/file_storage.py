@@ -14,12 +14,9 @@ class FileStorage:
             return FileStorage.__objects
         else:
             same_cls = {}
-
-            for key,val in FileStorage.__objects.items:
-                name = key.split('.')
-
-                if name[1] == cls:
-                    same_cls.update({key:val})
+            for key,val in FileStorage.__objects.items():
+                if isinstance(val, cls):
+                    same_cls[key] = val
         return same_cls
 
     def new(self, obj):
