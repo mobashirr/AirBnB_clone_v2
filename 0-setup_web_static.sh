@@ -42,6 +42,7 @@ setup_symbolic_link() {
 # Function to set ownership of /data/ to ubuntu user and group
 set_ownership() {
     sudo chown -R ubuntu:ubuntu /data/
+    sudo chmod -R 755 /data/
 }
 
 # Function to update Nginx configuration
@@ -60,8 +61,8 @@ server {
         try_files \$uri \$uri/ =404;
     }
 
-    location /hbnb_static {
-        alias ~/moh/repo/AirBnB_clone_v2/data/web_static/current/;
+    location /hbnb_static/ {
+        alias /data/web_static/current/;
         autoindex on;
     }
 }
