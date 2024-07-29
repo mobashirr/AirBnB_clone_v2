@@ -15,6 +15,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
+
 @app.route('/', strict_slashes=False)
 def hello_hbnb():
     """
@@ -22,12 +23,14 @@ def hello_hbnb():
     """
     return "Hello HBNB!"
 
+
 @app.route('/hbnb', strict_slashes=False)
 def hbnb():
     """
     Displays 'HBNB' when accessing the /hbnb route.
     """
     return "HBNB"
+
 
 @app.route('/c/<text>', strict_slashes=False)
 def c_text(text):
@@ -37,6 +40,7 @@ def c_text(text):
     """
     return "C " + text.replace('_', ' ')
 
+
 @app.route('/python/', strict_slashes=False)
 @app.route('/python/<text>', strict_slashes=False)
 def python_text(text="is cool"):
@@ -45,6 +49,7 @@ def python_text(text="is cool"):
     with underscores replaced by spaces. The default value of text is “is cool”.
     """
     return "Python " + text.replace('_', ' ')
+
 
 @app.route('/number/<int:n>', strict_slashes=False)
 def number(n):
