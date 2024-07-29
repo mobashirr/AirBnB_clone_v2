@@ -62,6 +62,7 @@ server {
 
     location /hbnb_static {
         alias ~/moh/repo/AirBnB_clone_v2/data/web_static/current/;
+        autoindex on;
     }
 }
 EOF
