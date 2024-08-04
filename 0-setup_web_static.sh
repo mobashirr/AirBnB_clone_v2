@@ -1,85 +1,39 @@
 #!/usr/bin/env bash
+# Sets up a web server for deployment of Airbnb_clone_web_static.
 
-# Exit on any error
-set -e
+sudo apt-get update
+sudo apt-get install -y nginx
 
-# Function to install Nginx if it is not already installed
-install_nginx() {
-    if ! command -v nginx > /dev/null; then
-        sudo apt update
-        sudo apt install -y nginx
-    fi
-}
+sudo mkdir -p /data/web_static/releases/test/
+sudo mkdir -p /data/web_static/shared/
 
-# Function to create a directory if it doesn't already exist
-create_dir_if_not_exists() {
-    if [ ! -d "$1" ]; then
-        sudo mkdir -p "$1"
-    fi
-}
+echo "Holberton School" > /data/web_static/releases/test/index.html
+sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 
-# Function to create a fake HTML file for testing
-create_fake_html() {
-    sudo tee /data/web_static/releases/test/index.html > /dev/null << EOF
-<html>
-  <head>
-  </head>
-  <body>
-    Holberton School
-  </body>
-</html>
-EOF
-}
+sudo chown -R ubuntu /data/
+sudo chgrp -R ubuntu /data/
 
-# Function to set up symbolic link
-setup_symbolic_link() {
-    if [ -L /data/web_static/current ]; then
-        sudo rm /data/web_static/current
-    fi
-    sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
-}
-
-# Function to set ownership of /data/ to ubuntu user and group
-set_ownership() {
-    sudo chown -R ubuntu:ubuntu /data/
-    sudo chmod -R 755 /data/
-}
-
-# Function to update Nginx configuration
-update_nginx_config() {
-    sudo tee /etc/nginx/sites-available/default > /dev/null << EOF
-server {
+printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
+    add_header X-Served-By kirito99x;
+    root   /var/www/html;
+    index  index.html index.htm;
 
-    root /var/www/html;
-    index index.html index.htm index.nginx-debian.html;
-
-    server_name _;
-
-    location / {
-        try_files \$uri \$uri/ =404;
+    location /hbnb_static {
+        alias /data/web_static/current;
+        index index.html index.htm;
     }
 
-    location /hbnb_static/ {
-        alias /data/web_static/current/;
-        autoindex on;
+    location /redirect_me {
+        return 301 http://kirito99x.tech;
     }
-}
-EOF
-    sudo systemctl restart nginx
-}
 
-# Main script execution
-install_nginx
-create_dir_if_not_exists "/data/"
-create_dir_if_not_exists "/data/web_static/"
-create_dir_if_not_exists "/data/web_static/releases/"
-create_dir_if_not_exists "/data/web_static/shared/"
-create_dir_if_not_exists "/data/web_static/releases/test/"
-create_fake_html
-setup_symbolic_link
-set_ownership
-update_nginx_config
+    error_page 404 /404.html;
+    location /404 {
+      root /var/www/html;
+      internal;
+    }
+}" > /etc/nginx/sites-available/default
 
-echo "Web server setup complete"
+sudo service nginx restart
