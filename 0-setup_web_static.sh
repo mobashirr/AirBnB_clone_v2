@@ -22,7 +22,7 @@ sudo chgrp -R ubuntu /data/
 printf %s "server {
     listen 80 default_server;
     listen [::]:80 default_server;
-    add_header X-Served-By kirito99x;
+    add_header X-Served-By "$HOSTNAME";
     root   /var/www/html;
     index  index.html index.htm;
 
@@ -32,7 +32,7 @@ printf %s "server {
     }
 
     location /redirect_me {
-        return 301 http://kirito99x.tech;
+        return 301 http://mobashir.tech;
     }
 
     error_page 404 /404.html;
